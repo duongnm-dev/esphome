@@ -24,8 +24,8 @@
  *    OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef LedControl_h
-#define LedControl_h
+#ifndef ledcontrol_h
+#define ledcontrol_h
 
 #if (ARDUINO >= 100)
 #include <Arduino.h>
