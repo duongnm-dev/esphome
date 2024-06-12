@@ -1,7 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import display, spi
-from esphome.const import CONF_ID, CONF_INTENSITY, CONF_LAMBDA, CONF_NUM_CHIPS
+from esphome.const import CONF_ID, CONF_INTENSITY, CONF_SCAN_LIMIT, CONF_LAMBDA, CONF_NUM_CHIPS
 
 DEPENDENCIES = ["spi"]
 
@@ -19,6 +19,7 @@ CONFIG_SCHEMA = (
             cv.GenerateID(): cv.declare_id(MAX7219Component),
             cv.Optional(CONF_NUM_CHIPS, default=1): cv.int_range(min=1, max=255),
             cv.Optional(CONF_INTENSITY, default=15): cv.int_range(min=0, max=15),
+            cv.Optional(CONF_SCAN_LIMIT, default=7): cv.int_range(min=0, max=7),
             cv.Optional(CONF_REVERSE_ENABLE, default=False): cv.boolean,
         }
     )
@@ -34,6 +35,7 @@ async def to_code(config):
 
     cg.add(var.set_num_chips(config[CONF_NUM_CHIPS]))
     cg.add(var.set_intensity(config[CONF_INTENSITY]))
+    cg.add(var.set_scan_limit(config[CONF_SCAN_LIMIT]))
     cg.add(var.set_reverse(config[CONF_REVERSE_ENABLE]))
 
     if CONF_LAMBDA in config:
