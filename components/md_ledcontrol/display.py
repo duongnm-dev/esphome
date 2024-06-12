@@ -5,7 +5,7 @@ from esphome.const import CONF_ID, CONF_INTENSITY, CONF_LAMBDA, CONF_NUM_CHIPS
 
 DEPENDENCIES = ["spi"]
 
-ledcontrol_ns = cg.esphome_ns.namespace("ledcontrol")
+ledcontrol_ns = cg.esphome_ns.namespace("LedControl")
 LedControlComponent = ledcontrol_ns.class_(
     "LedControlComponent", cg.PollingComponent, spi.SPIDevice
 )
