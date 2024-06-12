@@ -11,7 +11,7 @@ static const char *const TAG = "md_max7219";
 static const uint8_t MAX7219_REGISTER_NOOP = 0x00;
 static const uint8_t MAX7219_REGISTER_DECODE_MODE = 0x09;
 static const uint8_t MAX7219_REGISTER_INTENSITY = 0x0A;
-static const uint8_t MAX7219_REGISTER_num_scans = 0x0B;
+static const uint8_t MAX7219_REGISTER_SCAN_LIMIT = 0x0B;
 static const uint8_t MAX7219_REGISTER_SHUTDOWN = 0x0C;
 static const uint8_t MAX7219_REGISTER_TEST = 0x0F;
 static const uint8_t MAX7219_UNKNOWN_CHAR = 0b11111111;
@@ -123,7 +123,7 @@ void MAX7219Component::setup() {
     this->buffer_[i] = 0;
 
   // let's assume the user has all 8 digits connected, only important in daisy chained setups anyway
-  this->send_to_all_(MAX7219_REGISTER_num_scans, this->num_scans_);
+  this->send_to_all_(MAX7219_REGISTER_SCAN_LIMIT, this->num_scans_);
   // let's use our own ASCII -> led pattern encoding
   this->send_to_all_(MAX7219_REGISTER_DECODE_MODE, 0);
   this->send_to_all_(MAX7219_REGISTER_INTENSITY, this->intensity_);
@@ -170,7 +170,7 @@ void MAX7219Component::update() {
     this->intensity_changed_ = false;
   }
   if (this->num_scans_changed_) {
-    this->send_to_all_(MAX7219_REGISTER_num_scans, this->num_scans_);
+    this->send_to_all_(MAX7219_REGISTER_SCAN_LIMIT, this->num_scans_);
     this->num_scans_changed_ = false;
   }
   for (uint8_t i = 0; i < this->num_chips_ * 8; i++)
@@ -236,7 +236,7 @@ void MAX7219Component::set_intensity(uint8_t intensity) {
 void MAX7219Component::set_num_chips(uint8_t num_chips) { this->num_chips_ = num_chips; }
 void MAX7219Component::set_num_scans(uint8_t num_scans) {
   num_scans &= 0x7;
-  if (num_scans != this->num_scans) {
+  if (num_scans != this->num_scans_) {
     this->num_scans_changed_ = true;
     this->num_scans_ = num_scans;
   }
