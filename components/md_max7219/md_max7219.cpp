@@ -1,4 +1,4 @@
-#include "max7219.h"
+#include "md_max7219.h"
 #include "esphome/core/log.h"
 #include "esphome/core/helpers.h"
 #include "esphome/core/hal.h"
