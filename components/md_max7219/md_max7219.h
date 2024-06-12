@@ -30,7 +30,7 @@ class MAX7219Component : public PollingComponent,
 
   void set_intensity(uint8_t intensity);
   void set_num_chips(uint8_t num_chips);
-  void set_scan_limit(uint8_t scan_limit);
+  void set_num_scans(uint8_t num_scans);
   void set_reverse(bool reverse) { this->reverse_ = reverse; };
 
   /// Evaluate the printf-format and print the result at the given position.
@@ -54,9 +54,9 @@ class MAX7219Component : public PollingComponent,
   void send_to_all_(uint8_t a_register, uint8_t data);
 
   uint8_t intensity_{15};     // Intensity of the display from 0 to 15 (most)
-  uint8_t scan_limit_{7}
+  uint8_t num_scans_{7}
   bool intensity_changed_{};  // True if we need to re-send the intensity
-  bool scan_limit_changed_{}
+  bool num_scans_changed_{}
   uint8_t num_chips_{1};
   uint8_t *buffer_;
   bool reverse_{false};

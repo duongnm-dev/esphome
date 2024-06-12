@@ -35,7 +35,7 @@ async def to_code(config):
 
     cg.add(var.set_num_chips(config[CONF_NUM_CHIPS]))
     cg.add(var.set_intensity(config[CONF_INTENSITY]))
-    cg.add(var.set_scan_limit(config[CONF_NUM_SCANS]))
+    cg.add(var.set_num_scans(config[CONF_NUM_SCANS]))
     cg.add(var.set_reverse(config[CONF_REVERSE_ENABLE]))
 
     if CONF_LAMBDA in config:
