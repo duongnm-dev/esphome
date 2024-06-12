@@ -123,7 +123,7 @@ void MAX7219Component::setup() {
     this->buffer_[i] = 0;
 
   // let's assume the user has all 8 digits connected, only important in daisy chained setups anyway
-  this->send_to_all_(MAX7219_REGISTER_SCAN_LIMIT, 7);
+  this->send_to_all_(MAX7219_REGISTER_SCAN_LIMIT, this->scan_limit_);
   // let's use our own ASCII -> led pattern encoding
   this->send_to_all_(MAX7219_REGISTER_DECODE_MODE, 0);
   this->send_to_all_(MAX7219_REGISTER_INTENSITY, this->intensity_);
@@ -136,6 +136,7 @@ void MAX7219Component::dump_config() {
   ESP_LOGCONFIG(TAG, "MAX7219:");
   ESP_LOGCONFIG(TAG, "  Number of Chips: %u", this->num_chips_);
   ESP_LOGCONFIG(TAG, "  Intensity: %u", this->intensity_);
+  ESP_LOGCONFIG(TAG, "  Scan Limit: %u", this->scan_limit_);
   LOG_PIN("  CS Pin: ", this->cs_);
   LOG_UPDATE_INTERVAL(this);
 }
@@ -167,6 +168,10 @@ void MAX7219Component::update() {
   if (this->intensity_changed_) {
     this->send_to_all_(MAX7219_REGISTER_INTENSITY, this->intensity_);
     this->intensity_changed_ = false;
+  }
+  if (this->scan_limit_changed_) {
+    this->send_to_all_(MAX7219_REGISTER_SCAN_LIMIT, this->scan_limit_);
+    this->scan_limit_changed_ = false;
   }
   for (uint8_t i = 0; i < this->num_chips_ * 8; i++)
     this->buffer_[i] = 0;
@@ -229,6 +234,13 @@ void MAX7219Component::set_intensity(uint8_t intensity) {
   }
 }
 void MAX7219Component::set_num_chips(uint8_t num_chips) { this->num_chips_ = num_chips; }
+void MAX7219Component::set_scan_limit(uint8_t scan_limit) {
+  scan_limit &= 0x7;
+  if (scan_limit != this->scan_limit) {
+    this->scan_limit_changed_ = true;
+    this->scan_limit_ = scan_limit;
+  }
+}
 
 uint8_t MAX7219Component::strftime(uint8_t pos, const char *format, ESPTime time) {
   char buffer[64];
