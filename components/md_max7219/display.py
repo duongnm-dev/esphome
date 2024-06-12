@@ -5,18 +5,18 @@ from esphome.const import CONF_ID, CONF_INTENSITY, CONF_LAMBDA, CONF_NUM_CHIPS
 
 DEPENDENCIES = ["spi"]
 
-ledcontrol_ns = cg.esphome_ns.namespace("LedControl")
-LedControlComponent = ledcontrol_ns.class_(
-    "LedControlComponent", cg.PollingComponent, spi.SPIDevice
+md_max7219_ns = cg.esphome_ns.namespace("md_max7219")
+MAX7219Component = md_max7219_ns.class_(
+    "MAX7219Component", cg.PollingComponent, spi.SPIDevice
 )
-LedControlComponentRef = LedControlComponent.operator("ref")
+MAX7219ComponentRef = MAX7219Component.operator("ref")
 
 CONF_REVERSE_ENABLE = "reverse_enable"
 
 CONFIG_SCHEMA = (
     display.BASIC_DISPLAY_SCHEMA.extend(
         {
-            cv.GenerateID(): cv.declare_id(LedControlComponent),
+            cv.GenerateID(): cv.declare_id(MAX7219Component),
             cv.Optional(CONF_NUM_CHIPS, default=1): cv.int_range(min=1, max=255),
             cv.Optional(CONF_INTENSITY, default=15): cv.int_range(min=0, max=15),
             cv.Optional(CONF_REVERSE_ENABLE, default=False): cv.boolean,
@@ -38,6 +38,6 @@ async def to_code(config):
 
     if CONF_LAMBDA in config:
         lambda_ = await cg.process_lambda(
-            config[CONF_LAMBDA], [(LedControlComponent, "it")], return_type=cg.void
+            config[CONF_LAMBDA], [(MAX7219ComponentRef, "it")], return_type=cg.void
         )
         cg.add(var.set_writer(lambda_))
